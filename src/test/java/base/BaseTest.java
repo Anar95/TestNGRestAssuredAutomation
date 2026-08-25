@@ -54,8 +54,8 @@ public abstract class BaseTest {
     //her class ucun bır defe
     @BeforeClass(alwaysRun = true)
     public void authenticate() {
-        adminToken = TokenManager.adminToken;
-        userToken = TokenManager.userToken;;
+        adminToken = TokenManager.adminToken();
+        userToken = TokenManager.userToken();
     }
 
     // Hazır sorgu sablonları
