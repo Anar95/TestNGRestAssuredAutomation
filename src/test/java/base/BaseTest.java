@@ -76,7 +76,7 @@ public abstract class BaseTest {
                 .setBaseUri(BASE_URI)
                 .setContentType(ContentType.JSON)
                 .setAccept(ContentType.JSON)
-                .addHeader("Authorization","Bearer"+token)
+                .addHeader("Authorization","Bearer "+token)
                 .build();
     }
 
