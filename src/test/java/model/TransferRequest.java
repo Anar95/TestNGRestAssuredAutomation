@@ -17,8 +17,8 @@ public class TransferRequest {
       "description": "Test köçürməsi"
      */
 
-    private Integer fromAccountId;   // pul cıxan hesab
-    private Integer toAccountId;    // pul geden hesab
+    private String senderAccountId;   // pul cıxan hesab
+    private String receiverAccountId;    // pul geden hesab
     private Double amount;          // gınderılen mebleg
     private String description;     // acıqlaması
 
@@ -35,9 +35,9 @@ public class TransferRequest {
 
     // tam Constructor obyectını bır setırde  dolu yaratmaq ucun
 
-    public TransferRequest(Integer fromAccountId, Integer toAccountId, Double amount, String description) {
-        this.fromAccountId = fromAccountId;
-        this.toAccountId = toAccountId;
+    public TransferRequest(String senderAccountId, String receiverAccountId, Double amount, String description) {
+        this.senderAccountId = senderAccountId;
+        this.receiverAccountId = receiverAccountId;
         this.amount = amount;
         this.description = description;
     }
@@ -49,8 +49,8 @@ public class TransferRequest {
     // new TransferRequest(1,2,100.0,"Kamunal"
     // descrıptonu her testde el ıle yazmamaq ucun
 
-    public static  TransferRequest of (Integer fromAccountId, Integer toAccountId, Double amount) {
-        return new TransferRequest(fromAccountId,toAccountId,amount,"Auto test transfer");
+    public static  TransferRequest of (String senderAccountId, String receiverAccountId, Double amount) {
+        return new TransferRequest(senderAccountId,receiverAccountId,amount,"Auto test transfer");
     }
 
 
@@ -67,11 +67,11 @@ public class TransferRequest {
 
 
 
-    public Integer getFromAccountId() {return fromAccountId;}
-    public void setFromAccountId(Integer v) {this.fromAccountId = v;}
+    public String getSenderAccountId() {return senderAccountId;}
+    public void setSenderAccountId(String v) {this.senderAccountId = v;}
 
-    public Integer getToAccountId() {return toAccountId;}
-    public void setToAccountId(Integer v) {this.toAccountId = v;}
+    public String getReceiverAccountId() {return receiverAccountId;}
+    public void setReceiverAccountId(String v) {this.receiverAccountId = v;}
 
     public Double getAmount() {return amount;}
     public void setAmount(Double v) {this.amount = v;}

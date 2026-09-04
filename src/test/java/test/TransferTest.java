@@ -21,8 +21,8 @@ public class TransferTest extends BaseTest {
 
     //Transfer kocurme pozıtıve nqatıv testler
 
-    private int hesabA; //pulu gonderen
-    private int hesabB;  // pulu alan
+    private String hesabA; //pulu gonderen
+    private String hesabB;  // pulu alan
 
     /*
     bu metod tokenle ısleyır ona gorede Base Test auth  ondan sonra ıslemeldıır
@@ -31,7 +31,7 @@ public class TransferTest extends BaseTest {
 
     @BeforeClass(alwaysRun = true,dependsOnMethods = "authenticate")
     public void hesablarıHazırla(){
-        Response hesab = given().spec(authSpec(userToken))
+        Response hesab = given().spec(authSpec(adminToken))
                 .when()
                 .get("/accounts");
         hesab.then().statusCode(200);
@@ -40,12 +40,12 @@ public class TransferTest extends BaseTest {
 
         Assert.assertTrue(siyahi.size() >=2);
 
-        hesabA = hesab.jsonPath().getInt("[0].id");
-        hesabB = hesab.jsonPath().getInt("[1].id");
+        hesabA = hesab.jsonPath().getString("[0].id");
+        hesabB = hesab.jsonPath().getString("[1].id");
 
         System.out.println("hesabA: "+hesabA +" hesabB: "+hesabB);
 
-
+    }
 
 
 
@@ -53,19 +53,19 @@ public class TransferTest extends BaseTest {
 
         @Test(groups = {"smoke","transfer"},description = "Balans kocurulen mebleg geder azalmalıdır")
 
-                public void balansDuzgunAzalır(){
+            public void balansDuzgunAzalır(){
             double evvel = balansOxu(hesabA);
             double mebleg = 10.0;
 
-            System.out.println("Koxurmeden oncekı balans deyeri: " + evvel);
+            System.out.println("Kocurmeden oncekı balans deyeri: " + evvel);
 
             // 1 Kocurme
-        given().spec(authSpec(userToken))
+        given().spec(authSpec(adminToken))
                 .body(TransferRequest.of(hesabA,hesabB,mebleg))
-                .when()
-                .post("/transfer")
-                .then()
-                .statusCode(200)
+        .when()
+                .post("/transfers")
+        .then()
+                .statusCode(201)
                 .time(lessThan(MAX_TIME_MS));
 
 
@@ -74,19 +74,42 @@ public class TransferTest extends BaseTest {
             System.out.println("Kecurmede sonrakı balans: "+ sonra);
 
             //0.01= delta double muqayısesınde mutleq qoyulmalıdır
+        // Beraberdırmı "sonrakı mebleg= 969799"   evvel=979799-mebleg=10000
             Assert.assertEquals(sonra,evvel-mebleg,0.01,
-                    "Balans Duzgun Deyısmedı" +
+                    "Balans Duzgun Deyısmedı " +
                             "Evvel: "+ evvel +
                              "Sonra: " + sonra +
                              "Köçürülen: "+ mebleg +
                             "Gözlenilen: "+ (evvel-mebleg));
 
-
+     // evvel 10
+        // gonderılen 5 ıdıse
+        // qalan 5
+        // assertıon evvel-gonderılen = galan
 
         }
+
+
+
+    // Hesabın carı balansın qaytarır
+    //Balans harda saxlanılır   sualına cavab bu metoddur
+    //
+    private  double balansOxu(String hesabID){
+        Response hesab = given()
+                .spec(authSpec(adminToken))
+                .pathParams("id",hesabID)
+                .when()
+                .get("/accounts/{id}");
+
+        hesab.then().statusCode(200);
+
+        Object balance =  hesab.jsonPath().get("balance");
+        Assert.assertNotNull(balance,"balans sahesi tapılmadı! ");
+
+        return Double.parseDouble(balance.toString());
+
     }
 
 
+    }
 
-
-}

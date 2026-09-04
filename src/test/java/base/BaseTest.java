@@ -36,7 +36,7 @@ public abstract class BaseTest {
     protected String adminToken;
     protected String userToken;
 
-// Bütün suitde bşr defe istifade olunacaq
+// Bütün suitde bir defe istifade olunacaq
     @BeforeSuite(alwaysRun = true)
     public void globalSetup() {
         RestAssured.baseURI = BASE_URI;
